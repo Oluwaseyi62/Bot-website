@@ -32,58 +32,62 @@ const Header: React.FC = () => {
         isScrolled ? 'bg-white shadow-md py-2' : 'bg-transparent py-4'
       }`}
     >
-      <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold">
-          <span className="text-black tracking-wide">BANG ON TREND</span>
-        </Link>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
-          <Link to="/" className="text-black hover:text-gold-500 transition-colors">Home</Link>
-          <Link to="/shop" className="text-black hover:text-gold-500 transition-colors">Shop</Link>
-          <Link to="/about" className="text-black hover:text-gold-500 transition-colors">About</Link>
-          <Link to="/contact" className="text-black hover:text-gold-500 transition-colors">Contact</Link>
-          <Link to="/cart" className="relative">
-            <ShoppingBag size={24} className="text-black hover:text-gold-500 transition-colors" />
-            {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                {totalItems}
-              </span>
-            )}
+      <div className="container px-4 mx-auto">
+        <div className="flex items-center justify-between">
+          <Link to="/" className="text-2xl font-bold">
+            <span className="tracking-wide text-black">BANG ON TREND</span>
           </Link>
-        </nav>
 
-        {/* Mobile Navigation */}
-        <div className="flex items-center md:hidden">
-          <Link to="/cart" className="relative mr-6">
-            <ShoppingBag size={24} className="text-black" />
-            {totalItems > 0 && (
-              <span className="absolute -top-2 -right-2 bg-black text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                {totalItems}
-              </span>
-            )}
-          </Link>
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? (
-              <X size={24} className="text-black" />
-            ) : (
-              <Menu size={24} className="text-black" />
-            )}
-          </button>
-        </div>
-      </div>
+          {/* Desktop Navigation */}
+          <nav className="items-center hidden space-x-8 md:flex">
+            <Link to="/" className="text-black transition-colors hover:text-gold-500">Home</Link>
+            <Link to="/shop" className="text-black transition-colors hover:text-gold-500">Shop</Link>
+            <Link to="/track-order" className="text-black transition-colors hover:text-gold-500">Track Order</Link>
+            <Link to="/about" className="text-black transition-colors hover:text-gold-500">About</Link>
+            <Link to="/contact" className="text-black transition-colors hover:text-gold-500">Contact</Link>
+            <Link to="/cart" className="relative">
+              <ShoppingBag className="text-black transition-colors hover:text-gold-500" />
+              {totalItems > 0 && (
+                <span className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-black rounded-full -top-2 -right-2">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
+          </nav>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="absolute top-full left-0 w-full bg-white shadow-md py-4 px-4 md:hidden">
-          <div className="flex flex-col space-y-4">
-            <Link to="/" className="text-black hover:text-gold-500 transition-colors py-2">Home</Link>
-            <Link to="/shop" className="text-black hover:text-gold-500 transition-colors py-2">Shop</Link>
-            <Link to="/about" className="text-black hover:text-gold-500 transition-colors py-2">About</Link>
-            <Link to="/contact" className="text-black hover:text-gold-500 transition-colors py-2">Contact</Link>
+          {/* Mobile Navigation */}
+          <div className="flex items-center md:hidden">
+            <Link to="/cart" className="relative mr-6">
+              <ShoppingBag className="text-black" />
+              {totalItems > 0 && (
+                <span className="absolute flex items-center justify-center w-5 h-5 text-xs text-white bg-black rounded-full -top-2 -right-2">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
+              {isMenuOpen ? (
+                <X className="text-black" />
+              ) : (
+                <Menu className="text-black" />
+              )}
+            </button>
           </div>
         </div>
-      )}
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="absolute left-0 w-full px-4 py-4 bg-white shadow-md top-full md:hidden">
+            <div className="flex flex-col space-y-4">
+              <Link to="/" className="text-black transition-colors hover:text-gold-500">Home</Link>
+              <Link to="/shop" className="text-black transition-colors hover:text-gold-500">Shop</Link>
+              <Link to="/track-order" className="text-black transition-colors hover:text-gold-500">Track Order</Link>
+              <Link to="/about" className="text-black transition-colors hover:text-gold-500">About</Link>
+              <Link to="/contact" className="text-black transition-colors hover:text-gold-500">Contact</Link>
+            </div>
+          </div>
+        )}
+      </div>
     </header>
   );
 };

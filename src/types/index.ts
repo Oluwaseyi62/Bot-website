@@ -28,4 +28,5 @@ export interface Order extends Omit<CheckoutFormData, 'paymentProof'> {
   totalAmount: number;
   paymentProofName: string;
   orderDate: string;
+  status?: 'approved' | 'rejected';
 }

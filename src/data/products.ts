@@ -7,7 +7,7 @@ export const products: Product[] = [
     price: 29.99,
     image: '/images/bot2.jpg',
     category: 'men',
-    description: 'A timeless classic white t-shirt made from premium cotton. Perfect for any casual outfit and easy to style for any occasion.',
+    description: 'A timeless classic Hoodie made from premium cotton. Perfect for any casual outfit and easy to style for any occasion.',
     featured: true
   },
   {
@@ -16,7 +16,7 @@ export const products: Product[] = [
     price: 89.99,
     image: '/images/bot3.jpg',
     category: 'men',
-    description: 'Sleek black denim jeans with a perfect fit. Made from high-quality denim that offers both comfort and durability.',
+    description: 'Sleek black denim Hoodie with a perfect fit. Made from high-quality denim that offers both comfort and durability.',
     featured: true
   },
   {
@@ -33,19 +33,20 @@ export const products: Product[] = [
     name: 'BOT Crossbody Bag',
     price: 129.99,
     image: 'https://images.pexels.com/photos/1152077/pexels-photo-1152077.jpeg',
-    category: 'accessories',
+    category: 'men',
     description: 'Elegant leather crossbody bag with gold hardware. Spacious enough for essentials while maintaining a sleek profile.',
     featured: true
   },
-  /*
+  
   {
     id: 5,
-    name: 'Slim Fit Blazer',
+    name: 'BOT Cap',
     price: 149.99,
-    image: 'https://images.pexels.com/photos/1043474/pexels-photo-1043474.jpeg',
+    image: '/images/bot7.jpg',
     category: 'men',
-    description: 'Modern slim fit blazer perfect for both casual and formal occasions. The tailored fit offers a sleek silhouette for the modern man.'
+    description: 'Modern BOT Cap perfect for both casual and formal occasions. The tailored fit offers a sleek silhouette for the modern man.'
   },
+  /*
   {
     id: 6,
     name: 'High Waist Jeans',

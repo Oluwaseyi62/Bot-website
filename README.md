@@ -22,7 +22,7 @@
 - **Frontend**: React, TypeScript, Tailwind CSS, React Router
 - **Icons**: Lucide React
 - **State Management**: useState, Context API (if used)
-- **Hosting**: Vercel / Netlify
+- **Hosting**: Netlify
 
 ---
 
