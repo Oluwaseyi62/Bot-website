@@ -198,8 +198,9 @@ const Checkout: React.FC = () => {
       console.error("Error submitting order:", error);
     }
   };
+    console.log( import.meta.env.VITE_CLOUDINARY_CLOUD_NAME)
 
-  console.log( import.meta.env.VITE_CLOUDINARY_CLOUD_NAME)
+
   return (
     <div className="pt-20 pb-16">
       <div className="container px-4 mx-auto">
