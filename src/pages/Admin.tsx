@@ -4,6 +4,7 @@ import { Order } from '../types';
 import { Eye, CheckCircle, XCircle, LogOut, Key } from 'lucide-react';
 import Button from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
+import AdminProducts from './AdminProducts';
 
 const Admin: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -12,34 +13,82 @@ const Admin: React.FC = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [showProductForm, setShowProductForm] = useState(false);
   const { logout, changePassword } = useAuth();
   const navigate = useNavigate();
 
+  const fetchOrders = async () => {
+    try {
+      const response = await fetch("https://bot-server-i8jn.onrender.com/fetch-orders");
+      const data = await response.json();
+      const storedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+      setOrders(data.orders);
+    } catch (error) {
+      console.error("Failed to fetch orders:", error);
+    }
+  };
   useEffect(() => {
-    const storedOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-    setOrders(storedOrders);
+    
+
+    fetchOrders();
   }, []);
 
-  const handleApproveOrder = (orderId: string) => {
+  const handleApproveOrder = async (orderId: string) => {
+    // Update the order status in db
+  const response = await fetch(`https://bot-server-i8jn.onrender.com/orders/${orderId}/status`, {
+   method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status: 'approved' }),
+    });
+    if (!response.ok) {
+      console.error('Failed to approve order:', response.statusText);
+      return;
+    }
+    // Update the order status in local storage 
     const updatedOrders = orders.map(order => 
-      order.id === orderId 
+      order._id === orderId 
         ? { ...order, status: 'approved' }
         : order
     );
     localStorage.setItem('orders', JSON.stringify(updatedOrders));
+    fetchOrders(); // Fetch updated orders from the server
     setOrders(updatedOrders);
     setSelectedOrder(null);
   };
 
-  const handleRejectOrder = (orderId: string) => {
+  const handleRejectOrder = async (orderId: string) => {
+    const response = await fetch(`https://bot-server-i8jn.onrender.com/orders/${orderId}/status`, {
+      method: 'PUT',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify({ status: 'rejected' }),
+       });
+       if (!response.ok) {
+         console.error('Failed to approve order:', response.statusText);
+         return;
+       }
     const updatedOrders = orders.map(order => 
-      order.id === orderId 
+      order._id === orderId 
         ? { ...order, status: 'rejected' }
         : order
     );
     localStorage.setItem('orders', JSON.stringify(updatedOrders));
-    setOrders(updatedOrders);
+    // fetchOrders(); // Fetch updated orders from the server
+    // setOrders(updatedOrders);
     setSelectedOrder(null);
+  };
+
+  const handleOrderClick = async (orderId: string) => {
+    try {
+      const response = await fetch(`https://bot-server-i8jn.onrender.com/orders/${orderId}`);
+      const data = await response.json();
+      setSelectedOrder(data.order);
+    } catch (error) {
+      console.error("Failed to fetch order details:", error);
+    }
   };
 
   const handleLogout = () => {
@@ -80,6 +129,13 @@ const Admin: React.FC = () => {
             >
               <LogOut size={16} className="mr-2" />
               Logout
+            </Button>
+            <Button 
+              variant="primary" 
+              onClick={() => setShowProductForm(!showProductForm)}
+              className="flex items-center"
+            >
+              Add Product
             </Button>
           </div>
         </div>
@@ -132,6 +188,9 @@ const Admin: React.FC = () => {
           </div>
         )}
 
+        {/* Render the AdminProducts component when the form is toggled */}
+        {showProductForm && <AdminProducts />}
+
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Orders List */}
           <div className="lg:col-span-2">
@@ -143,16 +202,16 @@ const Admin: React.FC = () => {
               <div className="divide-y divide-gray-200">
                 {orders.map(order => (
                   <div 
-                    key={order.id} 
+                    key={order._id} 
                     className="p-4 cursor-pointer hover:bg-gray-50"
-                    onClick={() => setSelectedOrder(order)}
+                    onClick={() => handleOrderClick(order._id)}
                   >
                     <div className="flex items-start justify-between">
                       <div>
                         <p className="font-medium">{order.fullName}</p>
                         <p className="text-sm text-gray-600">{order.email}</p>
                         <p className="text-sm text-gray-600">
-                          Order {order.id} - {new Date(order.orderDate).toLocaleDateString()}
+                          Order {order._id} - {new Date(order.orderDate).toLocaleDateString()}
                         </p>
                       </div>
                       <div className="flex items-center">
@@ -168,8 +227,7 @@ const Admin: React.FC = () => {
                         <Button 
                           variant="secondary"
                           className="ml-4"
-                          onClick={(e) => {
-                            e.stopPropagation();
+                          onClick={() => {
                             setSelectedOrder(order);
                           }}
                         >
@@ -214,32 +272,38 @@ const Admin: React.FC = () => {
 
                   <div>
                     <h3 className="text-sm font-medium text-gray-500">Payment Proof</h3>
-                    <p>{selectedOrder.paymentProofName}</p>
+                    <img 
+                      src={selectedOrder.paymentProof} 
+                      alt="Payment Proof" 
+                      className="w-full h-auto rounded-md"
+                    />
                   </div>
 
                   <div>
                     <h3 className="text-sm font-medium text-gray-500">Order Items</h3>
                     <div className="mt-2 space-y-2">
-                      {selectedOrder.items.map(item => (
-                        <div key={item.product.id} className="flex justify-between">
-                          <span>{item.product.name} x {item.quantity}</span>
-                          <span>${(item.product.price * item.quantity).toFixed(2)}</span>
+                      {selectedOrder.cartItems?.map(item => (
+                        <div key={item.productId._id} className="flex justify-between">
+                          <span>{item.productId.name} x {item.quantity}</span>
+                          <span>${(item.productId.price * item.quantity).toFixed(2)}</span>
                         </div>
-                      ))}
+                      )) || (
+                        <p className="text-gray-500">No items found in this order</p>
+                      )}
                     </div>
                   </div>
 
                   <div className="pt-4 border-t">
                     <div className="flex justify-between font-medium">
                       <span>Total Amount</span>
-                      <span>${selectedOrder.totalAmount.toFixed(2)}</span>
+                      <span>${selectedOrder.totalPrice ? selectedOrder.totalPrice.toFixed(2) : '0.00'}</span>
                     </div>
                   </div>
 
-                  {!selectedOrder.status && (
+                  {selectedOrder.status && (
                     <div className="flex gap-4 mt-6">
                       <Button
-                        onClick={() => handleApproveOrder(selectedOrder.id)}
+                        onClick={() => handleApproveOrder(selectedOrder._id)}
                         className="flex items-center"
                       >
                         <CheckCircle size={16} className="mr-2" />
@@ -247,7 +311,7 @@ const Admin: React.FC = () => {
                       </Button>
                       <Button
                         variant="outline"
-                        onClick={() => handleRejectOrder(selectedOrder.id)}
+                        onClick={() => handleRejectOrder(selectedOrder._id)}
                         className="flex items-center"
                       >
                         <XCircle size={16} className="mr-2" />
@@ -270,3 +334,4 @@ const Admin: React.FC = () => {
 };
 
 export default Admin;
+

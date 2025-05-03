@@ -14,7 +14,7 @@ const ProductDetails: React.FC = () => {
 
   useEffect(() => {
     if (id) {
-      const foundProduct = products.find(p => p.id === parseInt(id));
+      const foundProduct = products.find(p => p._id === id);
       setProduct(foundProduct || null);
     }
   }, [id]);
@@ -47,7 +47,7 @@ const ProductDetails: React.FC = () => {
 
   // Find related products (same category, excluding current product)
   const relatedProducts = products
-    .filter(p => p.category === product.category && p.id !== product.id)
+    .filter(p => p.category === product.category && p._id !== product._id)
     .slice(0, 4);
 
   return (
@@ -108,7 +108,7 @@ const ProductDetails: React.FC = () => {
             <h2 className="mb-6 text-2xl font-bold">You Might Also Like</h2>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {relatedProducts.map(relatedProduct => (
-                <Link to={`/product/${relatedProduct.id}`} key={relatedProduct.id}>
+                <Link to={`/product/${relatedProduct._id}`} key={relatedProduct._id}>
                   <div className="group">
                     <div className="relative mb-4 overflow-hidden">
                       <img 

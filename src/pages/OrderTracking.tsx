@@ -10,20 +10,30 @@ const OrderTracking: React.FC = () => {
   const [error, setError] = useState('');
   const [isSearched, setIsSearched] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     const orders = JSON.parse(localStorage.getItem('orders') || '[]') as Order[];
-    const foundOrder = orders.find(o => o.id === orderId.trim());
-    
-    if (foundOrder) {
-      setOrder(foundOrder);
-      setError('');
+   
+    const response = await fetch(`https://bot-server-i8jn.onrender.com/track-order/${orderId}`);
+    const data = await response.json();
+
+    if (response.ok) {
+      setOrder(data.items);
+      
     } else {
       setOrder(null);
       setError('Order not found. Please check the order number and try again.');
     }
+    // if (foundOrder) {
+    //   setOrder(foundOrder);
+    //   setError('');
+    // } else {
+    //   setOrder(null);
+    //   setError('Order not found. Please check the order number and try again.');
+    // }
     setIsSearched(true);
   };
+  
 
   const getStatusDetails = (status?: string) => {
     switch (status) {
@@ -117,7 +127,7 @@ const OrderTracking: React.FC = () => {
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <p className="text-gray-600">Order Number</p>
-                      <p className="font-medium">{order.id}</p>
+                      <p className="font-medium">{order.orderId}</p>
                     </div>
                     <div>
                       <p className="text-gray-600">Order Date</p>
@@ -131,7 +141,7 @@ const OrderTracking: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-gray-600">Total Amount</p>
-                      <p className="font-medium">${order.totalAmount.toFixed(2)}</p>
+                      <p className="font-medium">${order.totalPrice}</p>
                     </div>
                   </div>
                 </div>
@@ -139,18 +149,18 @@ const OrderTracking: React.FC = () => {
                 <div className="pt-4 border-t">
                   <h3 className="mb-2 font-medium">Items</h3>
                   <div className="space-y-3">
-                    {order.items.map((item) => (
-                      <div key={item.product.id} className="flex items-center gap-4">
+                    {order.cartItems.map((item) => (
+                      <div key={item.productId._id} className="flex items-center gap-4">
                         <img
-                          src={item.product.image}
-                          alt={item.product.name}
+                          src={item.productId.image}
+                          alt={item.productId.name}
                           className="object-cover w-16 h-16 rounded"
                         />
                         <div className="flex-1">
-                          <p className="font-medium">{item.product.name}</p>
+                          <p className="font-medium">{item.productId.name}</p>
                           <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
                         </div>
-                        <p className="font-medium">${(item.product.price * item.quantity).toFixed(2)}</p>
+                        <p className="font-medium">${(item.productId.price * item.quantity).toFixed(2)}</p>
                       </div>
                     ))}
                   </div>

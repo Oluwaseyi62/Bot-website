@@ -1,14 +1,46 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/ui/Button';
 import ProductCard from '../components/ui/ProductCard';
 import { products } from '../data/products';
 import { ShoppingBag, TrendingUp, Package, CreditCard } from 'lucide-react';
 
+export const getSessionId = () => {
+  let sessionId = localStorage.getItem("sessionId");
+  if (!sessionId) {
+    sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem("sessionId", sessionId);
+  }
+  return sessionId;
+};
+
 const Home: React.FC = () => {
+  const [productss, setProducts] = useState<any[]>([]);
   const featuredProducts = products.filter(product => product.featured);
+  
+  
   const heroText = "BANG ON TREND";
 
+ 
+  const  sessionId = getSessionId();
+  console.log("Session ID:", sessionId); // Log the session ID for debugging
+
+  const fetchFeaturedProducts = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/fetch-products");
+      const data = await response.json();
+      const featured = data.products.filter((product: any) => product.featured);
+      console.log(featured)
+      setProducts(featured);
+    } catch (error) {
+      console.error("Failed to fetch featured products:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFeaturedProducts();
+  }, []);
+ 
   return (
     <div className="mt-16">
       {/* Hero Section */}
@@ -48,8 +80,8 @@ const Home: React.FC = () => {
           </p>
           
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {featuredProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
+            {productss.map(product => (
+              <ProductCard key={product._id} product={product} />
             ))}
           </div>
           

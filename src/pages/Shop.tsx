@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProductCard from '../components/ui/ProductCard';
 import { products } from '../data/products';
 
@@ -6,7 +6,24 @@ type Category = 'all' | 'men' | 'women' | 'accessories';
 
 const Shop: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<Category>('all');
+    const [products, setProducts] = useState<any[]>([]);
+  
 
+   const fetchCategoryProducts = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/fetch-products");
+        const data = await response.json();
+        const featured = data.products.filter((product: any) => product.featured);
+        console.log(featured)
+        setProducts(featured);
+      } catch (error) {
+        console.error("Failed to fetch featured products:", error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchCategoryProducts();
+    }, []);
   const filteredProducts = activeCategory === 'all' 
     ? products 
     : products.filter(product => product.category === activeCategory);
@@ -48,7 +65,7 @@ const Shop: React.FC = () => {
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
           {filteredProducts.map(product => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard key={product._id} product={product} />
           ))}
         </div>
         

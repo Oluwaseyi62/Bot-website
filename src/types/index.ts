@@ -1,5 +1,5 @@
 export interface Product {
-  id: number;
+  _id: string;
   name: string;
   price: number;
   image: string;
@@ -9,8 +9,10 @@ export interface Product {
 }
 
 export interface CartItem {
-  product: Product;
+  _id?: string;
+  productId: Product;
   quantity: number;
+  removed?: boolean;
 }
 
 export interface CheckoutFormData {
@@ -19,14 +21,27 @@ export interface CheckoutFormData {
   phone: string;
   address?: string;
   deliveryOption: 'pickup' | 'delivery';
-  paymentProof: File | null;
+  paymentProof: string | null;
+  productId: string;
+  sessionId: string;
+  orderId?:string
+  
+}
+export interface AddProductFormData {
+  name: string;
+  description: string;
+  price: number;
+  image: string | null
+  category: string;
 }
 
 export interface Order extends Omit<CheckoutFormData, 'paymentProof'> {
-  id: string;
+  _id: string;
   items: CartItem[];
-  totalAmount: number;
-  paymentProofName: string;
+  cartItems?: CartItem[];
+totalAmount: number;
+totalPrice?: number;
+  paymentProof: string;
   orderDate: string;
   status?: 'approved' | 'rejected';
 }

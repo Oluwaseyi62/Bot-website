@@ -14,7 +14,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <div className="group">
       <div className="relative overflow-hidden mb-4">
-        <Link to={`/product/${product.id}`}>
+        <Link to={`/product/${product._id}`}>
           <img 
             src={product.image} 
             alt={product.name} 
@@ -30,7 +30,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </Button>
         </div>
       </div>
-      <Link to={`/product/${product.id}`}>
+      <Link to={`/product/${product._id}`}>
         <h3 className="text-lg font-medium mb-1 transition-colors group-hover:text-gray-700">{product.name}</h3>
       </Link>
       <p className="text-gray-800 font-semibold">${product.price.toFixed(2)}</p>

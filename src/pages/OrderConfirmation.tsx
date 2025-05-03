@@ -8,7 +8,7 @@ const OrderConfirmation: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const order = location.state?.order as Order | undefined;
-
+ console.log(order, 'order in order confirmation')
   useEffect(() => {
     // Redirect to home if accessed directly without an order
     if (!order) {
@@ -38,7 +38,7 @@ const OrderConfirmation: React.FC = () => {
                 We've received your order and will review your payment proof shortly.
               </p>
               <p className="text-lg font-medium">
-                Your order number is: <span className="text-black">{order.id}</span>
+                Your order number is: <span className="text-black">{order._id}</span>
               </p>
               <div className="mt-4">
                 <Link to="/track-order" className="inline-flex items-center text-black hover:underline">
@@ -54,7 +54,7 @@ const OrderConfirmation: React.FC = () => {
               <div className="grid grid-cols-1 gap-4 mb-6 md:grid-cols-2">
                 <div>
                   <h3 className="text-sm font-medium text-gray-500">Order Number</h3>
-                  <p className="font-medium">{order.id}</p>
+                  <p className="font-medium">{order._id}</p>
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-gray-500">Order Date</h3>
@@ -68,7 +68,11 @@ const OrderConfirmation: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-sm font-medium text-gray-500">Payment Proof</h3>
-                  <p className="font-medium">{order.paymentProofName}</p>
+                    <img 
+                    src={order.paymentProof} 
+                    alt="Payment Proof" 
+                    className="object-cover w-full h-auto rounded"
+                    />
                 </div>
               </div>
               
@@ -99,16 +103,16 @@ const OrderConfirmation: React.FC = () => {
               
               <div className="mb-6 space-y-4">
                 {order.items.map(item => (
-                  <div key={item.product.id} className="flex gap-4">
+                  <div key={item.productId._id} className="flex gap-4">
                     <img 
-                      src={item.product.image} 
-                      alt={item.product.name} 
+                      src={item.productId.image} 
+                      alt={item.productId.name} 
                       className="object-cover w-16 h-16 rounded"
                     />
                     <div className="flex-1">
                       <div className="flex justify-between">
-                        <h3 className="font-medium">{item.product.name}</h3>
-                        <p className="text-gray-800">${(item.product.price * item.quantity).toFixed(2)}</p>
+                        <h3 className="font-medium">{item.productId.name}</h3>
+                        <p className="text-gray-800">${(item.productId.price * item.quantity).toFixed(2)}</p>
                       </div>
                       <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                     </div>
