@@ -198,7 +198,7 @@ const Checkout: React.FC = () => {
       console.error("Error submitting order:", error);
     }
   };
-    console.log( import.meta.env.VITE_CLOUDINARY_CLOUD_NAME)
+    
 
 
   return (
