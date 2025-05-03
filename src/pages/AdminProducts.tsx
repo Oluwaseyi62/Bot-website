@@ -21,7 +21,7 @@ const AdminProducts: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://localhost:3000/fetch-products");
+        const response = await fetch("https://bot-server-i8jn.onrender.com/fetch-products");
         const data = await response.json();
         setProducts(data.products);
       } catch (error) {
@@ -45,7 +45,7 @@ const AdminProducts: React.FC = () => {
   const handleProductDelete = async (productId: number) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/del-product/${productId}`, {
+        `https://bot-server-i8jn.onrender.com/del-product/${productId}`, {
         method: "DELETE",
         }
       );
@@ -155,7 +155,7 @@ const AdminProducts: React.FC = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:3000/products", {
+      const response = await fetch("https://bot-server-i8jn.onrender.com/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
