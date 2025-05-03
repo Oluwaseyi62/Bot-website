@@ -17,18 +17,19 @@ const AdminProducts: React.FC = () => {
     image: null,
     category: "",
   });
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch("https://bot-server-i8jn.onrender.com/fetch-products");
+      const data = await response.json();
+      setProducts(data.products);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+    }
+  };
+
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("https://bot-server-i8jn.onrender.com/fetch-products");
-        const data = await response.json();
-        setProducts(data.products);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      }
-    };
-
+    
     fetchProducts();
   }, []);
 
@@ -42,8 +43,10 @@ const AdminProducts: React.FC = () => {
  
 
   
-  const handleProductDelete = async (productId: number) => {
+  const handleProductDelete = async (productId: string) => {
+    console.log('prodict', productId)
     try {
+
       const response = await fetch(
         `https://bot-server-i8jn.onrender.com/del-product/${productId}`, {
         method: "DELETE",
@@ -53,6 +56,7 @@ const AdminProducts: React.FC = () => {
       if (response.ok) {
         console.log("Product deleted successfully:", data.message);
         alert("Product deleted successfully!");
+        fetchProducts()
       } else {
         console.error("Failed to delete product:", data.message);
         alert(`Error: ${data.message}`);
@@ -340,7 +344,7 @@ const AdminProducts: React.FC = () => {
                   </p>
                   <button
                       onClick={() => {
-                        handleProductDelete(product.id); // Implement this function to delete the product
+                        handleProductDelete(product._id); // Implement this function to delete the product
                       }}
                       className="text-red-500 hover:text-red-700"
                     >
