@@ -44,7 +44,7 @@ const AdminProducts: React.FC = () => {
 
   
   const handleProductDelete = async (productId: string) => {
-    console.log('prodict', productId)
+   
     try {
 
       const response = await fetch(

@@ -23,14 +23,14 @@ const Home: React.FC = () => {
 
  
   const  sessionId = getSessionId();
-  console.log("Session ID:", sessionId); // Log the session ID for debugging
+  
 
   const fetchFeaturedProducts = async () => {
     try {
       const response = await fetch("https://bot-server-i8jn.onrender.com/fetch-products");
       const data = await response.json();
       const featured = data.products.filter((product: any) => product.featured);
-      console.log(featured)
+    
       setProducts(featured);
     } catch (error) {
       console.error("Failed to fetch featured products:", error);
