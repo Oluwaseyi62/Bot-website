@@ -11,7 +11,7 @@ const Shop: React.FC = () => {
 
    const fetchCategoryProducts = async () => {
       try {
-        const response = await fetch("http://localhost:3000/fetch-products");
+        const response = await fetch("https://bot-server-i8jn.onrender.com/fetch-products");
         const data = await response.json();
         const featured = data.products.filter((product: any) => product.featured);
         console.log(featured)
