@@ -29,7 +29,6 @@ const AdminProducts: React.FC = () => {
 
 
   useEffect(() => {
-<<<<<<< HEAD
     const fetchProducts = async () => {
       try {
         const response = await fetch("https://bot-server-i8jn.onrender.com/fetch-products");
@@ -40,9 +39,7 @@ const AdminProducts: React.FC = () => {
       }
     };
 
-=======
-    
->>>>>>> 124ad3aa3080123e1c226678e738e4734394fb67
+
     fetchProducts();
   }, []);
 
