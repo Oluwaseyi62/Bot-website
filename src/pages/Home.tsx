@@ -79,11 +79,7 @@ const Home: React.FC = () => {
             Explore our handpicked selection of the season's most coveted styles and statement pieces.
           </p>
           
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {productss.map(product => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
+         
           
           <div className="mt-12 text-center">
             <Link to="/shop">
