@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Order } from '../types';
-import { Eye, CheckCircle, XCircle, LogOut, Key } from 'lucide-react';
+import { Eye, CheckCircle, XCircle, LogOut, Key, Trash2 } from 'lucide-react';
 import Button from '../components/ui/Button';
 import { useAuth } from '../context/AuthContext';
 import AdminProducts from './AdminProducts';
@@ -14,6 +14,7 @@ const Admin: React.FC = () => {
   const [newPassword, setNewPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showProductForm, setShowProductForm] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const { logout, changePassword } = useAuth();
   const navigate = useNavigate();
 
@@ -27,16 +28,14 @@ const Admin: React.FC = () => {
       console.error("Failed to fetch orders:", error);
     }
   };
-  useEffect(() => {
-    
 
+  useEffect(() => {
     fetchOrders();
   }, []);
 
   const handleApproveOrder = async (orderId: string) => {
-    // Update the order status in db
-  const response = await fetch(`https://bot-server-i8jn.onrender.com/orders/${orderId}/status`, {
-   method: 'PUT',
+    const response = await fetch(`https://bot-server-i8jn.onrender.com/orders/${orderId}/status`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -46,14 +45,13 @@ const Admin: React.FC = () => {
       console.error('Failed to approve order:', response.statusText);
       return;
     }
-    // Update the order status in local storage 
     const updatedOrders = orders.map(order => 
       order._id === orderId 
         ? { ...order, status: 'approved' }
         : order
     );
     localStorage.setItem('orders', JSON.stringify(updatedOrders));
-    fetchOrders(); // Fetch updated orders from the server
+    fetchOrders();
     setOrders(updatedOrders);
     setSelectedOrder(null);
   };
@@ -61,24 +59,39 @@ const Admin: React.FC = () => {
   const handleRejectOrder = async (orderId: string) => {
     const response = await fetch(`https://bot-server-i8jn.onrender.com/orders/${orderId}/status`, {
       method: 'PUT',
-         headers: {
-           'Content-Type': 'application/json',
-         },
-         body: JSON.stringify({ status: 'rejected' }),
-       });
-       if (!response.ok) {
-         console.error('Failed to approve order:', response.statusText);
-         return;
-       }
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ status: 'rejected' }),
+    });
+    if (!response.ok) {
+      console.error('Failed to reject order:', response.statusText);
+      return;
+    }
     const updatedOrders = orders.map(order => 
       order._id === orderId 
         ? { ...order, status: 'rejected' }
         : order
     );
     localStorage.setItem('orders', JSON.stringify(updatedOrders));
-    // fetchOrders(); // Fetch updated orders from the server
-    // setOrders(updatedOrders);
     setSelectedOrder(null);
+  };
+
+  const handleDeleteOrder = async () => {
+    if (!selectedOrder) return;
+
+    const response = await fetch(`https://bot-server-i8jn.onrender.com/orders/${selectedOrder._id}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      console.error('Failed to delete order:', response.statusText);
+      return;
+    }
+    const updatedOrders = orders.filter(order => order._id !== selectedOrder._id);
+    localStorage.setItem('orders', JSON.stringify(updatedOrders));
+    setOrders(updatedOrders);
+    setSelectedOrder(null);
+    setShowDeleteConfirm(false);
   };
 
   const handleOrderClick = async (orderId: string) => {
@@ -188,17 +201,31 @@ const Admin: React.FC = () => {
           </div>
         )}
 
-        {/* Render the AdminProducts component when the form is toggled */}
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="w-full max-w-sm p-6 bg-white rounded shadow">
+              <h2 className="mb-4 text-lg font-bold">Delete Order</h2>
+              <p className="mb-6 text-gray-600">Are you sure you want to delete this order? This action cannot be undone.</p>
+              <div className="flex justify-end gap-4">
+                <Button variant="outline" onClick={() => setShowDeleteConfirm(false)}>
+                  Cancel
+                </Button>
+                <Button variant="destructive" onClick={handleDeleteOrder}>
+                  Delete
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {showProductForm && <AdminProducts />}
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
-          {/* Orders List */}
           <div className="lg:col-span-2">
             <div className="overflow-hidden bg-white rounded-lg shadow-sm">
               <div className="p-4 border-b border-gray-200 bg-gray-50">
                 <h2 className="text-xl font-semibold">Orders</h2>
               </div>
-              
               <div className="divide-y divide-gray-200">
                 {orders.map(order => (
                   <div 
@@ -224,21 +251,35 @@ const Admin: React.FC = () => {
                         }`}>
                           {order.status || 'Pending'}
                         </span>
-                        <Button 
-                          variant="secondary"
-                          className="ml-4"
-                          onClick={() => {
-                            setSelectedOrder(order);
-                          }}
-                        >
-                          <Eye size={16} className="mr-1" />
-                          View
-                        </Button>
+                        <div className="flex gap-2 ml-4">
+  <Button 
+    variant="secondary"
+    onClick={(e) => {
+      e.stopPropagation();
+      setSelectedOrder(order);
+    }}
+  >
+    <Eye size={16} className="mr-1" />
+    View
+  </Button>
+  <Button 
+    variant="outline"
+    className="text-red-600 hover:text-red-700"
+    onClick={(e) => {
+      e.stopPropagation();
+      setSelectedOrder(order);
+      setShowDeleteConfirm(true);
+    }}
+  >
+    <Trash2 size={16} className="mr-1" />
+    Delete
+  </Button>
+</div>
+
                       </div>
                     </div>
                   </div>
                 ))}
-
                 {orders.length === 0 && (
                   <div className="p-8 text-center text-gray-500">
                     No orders found
@@ -248,12 +289,10 @@ const Admin: React.FC = () => {
             </div>
           </div>
 
-          {/* Order Details */}
           <div className="lg:col-span-1">
             {selectedOrder ? (
               <div className="p-6 bg-white rounded-lg shadow-sm">
                 <h2 className="mb-4 text-xl font-semibold">Order Details</h2>
-                
                 <div className="space-y-4">
                   <div>
                     <h3 className="text-sm font-medium text-gray-500">Customer Information</h3>
@@ -261,7 +300,6 @@ const Admin: React.FC = () => {
                     <p>{selectedOrder.email}</p>
                     <p>{selectedOrder.phone}</p>
                   </div>
-
                   <div>
                     <h3 className="text-sm font-medium text-gray-500">Delivery Option</h3>
                     <p>{selectedOrder.deliveryOption === 'delivery' ? 'Doorstep Delivery' : 'Store Pickup'}</p>
@@ -269,7 +307,6 @@ const Admin: React.FC = () => {
                       <p className="mt-1">{selectedOrder.address}</p>
                     )}
                   </div>
-
                   <div>
                     <h3 className="text-sm font-medium text-gray-500">Payment Proof</h3>
                     <img 
@@ -278,7 +315,6 @@ const Admin: React.FC = () => {
                       className="w-full h-auto rounded-md"
                     />
                   </div>
-
                   <div>
                     <h3 className="text-sm font-medium text-gray-500">Order Items</h3>
                     <div className="mt-2 space-y-2">
@@ -292,33 +328,37 @@ const Admin: React.FC = () => {
                       )}
                     </div>
                   </div>
-
                   <div className="pt-4 border-t">
                     <div className="flex justify-between font-medium">
                       <span>Total Amount</span>
                       <span>${selectedOrder.totalPrice ? selectedOrder.totalPrice.toFixed(2) : '0.00'}</span>
                     </div>
                   </div>
-
-                  {selectedOrder.status && (
-                    <div className="flex gap-4 mt-6">
-                      <Button
-                        onClick={() => handleApproveOrder(selectedOrder._id)}
-                        className="flex items-center"
-                      >
-                        <CheckCircle size={16} className="mr-2" />
-                        Approve Order
-                      </Button>
-                      <Button
-                        variant="outline"
-                        onClick={() => handleRejectOrder(selectedOrder._id)}
-                        className="flex items-center"
-                      >
-                        <XCircle size={16} className="mr-2" />
-                        Reject Order
-                      </Button>
-                    </div>
-                  )}
+                  <div className="flex gap-4 mt-6">
+                    <Button
+                      onClick={() => handleApproveOrder(selectedOrder._id)}
+                      className="flex items-center"
+                    >
+                      <CheckCircle size={16} className="mr-2" />
+                      Approve Order
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleRejectOrder(selectedOrder._id)}
+                      className="flex items-center"
+                    >
+                      <XCircle size={16} className="mr-2" />
+                      Reject Order
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full text-red-600 hover:text-red-700"
+                      onClick={() => setShowDeleteConfirm(true)}
+                    >
+                      <Trash2 size={16} className="mr-2" />
+                      Delete Order
+                    </Button>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -334,4 +374,3 @@ const Admin: React.FC = () => {
 };
 
 export default Admin;
-
