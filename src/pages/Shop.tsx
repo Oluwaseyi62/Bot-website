@@ -37,12 +37,12 @@ const Shop: React.FC = () => {
 
   return (
     <div className="pt-20 pb-16">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold text-center mb-8 pt-8">Shop Collection</h1>
+      <div className="container px-4 mx-auto">
+        <h1 className="pt-8 mb-8 text-3xl font-bold text-center">Shop Collection</h1>
 
         {/* Category Filter */}
         <div className="flex justify-center mb-12">
-          <div className="inline-flex flex-wrap justify-center border-b border-gray-200 gap-2 md:gap-8">
+          <div className="inline-flex flex-wrap justify-center gap-2 border-b border-gray-200 md:gap-8">
             {categories.map(category => (
               <button
                 key={category.value}
@@ -63,14 +63,14 @@ const Shop: React.FC = () => {
         </div>
 
         {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 md:gap-8">
           {filteredProducts.map(product => (
             <ProductCard key={product._id} product={product} />
           ))}
         </div>
         
         {filteredProducts.length === 0 && (
-          <div className="text-center py-12 text-gray-500">
+          <div className="py-12 text-center text-gray-500">
             No products found in this category.
           </div>
         )}

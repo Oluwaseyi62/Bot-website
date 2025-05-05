@@ -12,6 +12,9 @@ const Checkout: React.FC = () => {
     Partial<Record<keyof CheckoutFormData, string>>
   >({});
   const [filePreview, setFilePreview] = useState<string>("");
+  const [uploading, setUploading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
   const [formData, setFormData] = useState<CheckoutFormData>({
     fullName: "",
     email: "",
@@ -42,7 +45,6 @@ const Checkout: React.FC = () => {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when field is edited
     if (errors[name as keyof CheckoutFormData]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -56,7 +58,6 @@ const Checkout: React.FC = () => {
     const file = e.target.files?.[0] || null;
 
     if (file) {
-      // Validate file type
       const validTypes = [
         "image/jpeg",
         "image/png",
@@ -71,13 +72,12 @@ const Checkout: React.FC = () => {
         return;
       }
 
-      // Clear error
       setErrors((prev) => ({ ...prev, paymentProof: "" }));
+      setUploading(true);
 
-      // Upload to Cloudinary
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("upload_preset", "bang-trend"); // Replace with your Cloudinary upload preset
+      const form = new FormData();
+      form.append("file", file);
+      form.append("upload_preset", "bang-trend");
 
       try {
         const response = await fetch(
@@ -86,18 +86,14 @@ const Checkout: React.FC = () => {
           }/upload`,
           {
             method: "POST",
-            body: formData,
+            body: form,
           }
         );
 
-        if (!response.ok) {
-          throw new Error("Failed to upload file");
-        }
+        if (!response.ok) throw new Error("Failed to upload file");
 
         const data = await response.json();
-       
 
-        // Set file preview for images
         if (file.type.startsWith("image/")) {
           setFilePreview(data.secure_url);
         } else {
@@ -111,6 +107,8 @@ const Checkout: React.FC = () => {
           ...prev,
           paymentProof: "Failed to upload file. Please try again.",
         }));
+      } finally {
+        setUploading(false);
       }
     }
   };
@@ -118,24 +116,19 @@ const Checkout: React.FC = () => {
   const validateForm = (): boolean => {
     const newErrors: Partial<Record<keyof CheckoutFormData, string>> = {};
 
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = "Full name is required";
-    }
-
+    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
-
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Phone number is required";
-    }
-
-    if (formData.deliveryOption === "delivery" && !formData.address?.trim()) {
+    if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
+    if (
+      formData.deliveryOption === "delivery" &&
+      !formData.address?.trim()
+    ) {
       newErrors.address = "Address is required for delivery";
     }
-
     if (!formData.paymentProof) {
       newErrors.paymentProof = "Payment proof is required";
     }
@@ -146,11 +139,9 @@ const Checkout: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
 
-    if (!validateForm()) {
-      return;
-    }
-
+    setSubmitting(true);
     try {
       const response = await fetch("https://bot-server-i8jn.onrender.com/orders", {
         method: "POST",
@@ -159,11 +150,9 @@ const Checkout: React.FC = () => {
         },
         body: JSON.stringify({ ...formData, totalAmount }),
       });
-     
-      const data = await response.json();
-      
 
-      // Create order object
+      const data = await response.json();
+
       const order: Order = {
         _id: formData.orderId!,
         fullName: formData.fullName,
@@ -178,28 +167,20 @@ const Checkout: React.FC = () => {
         orderDate: new Date().toISOString(),
         productId: formData.productId,
         sessionId: formData.sessionId,
-        
       };
-      delCart();
 
-      // Save order to localStorage
       const existingOrders = JSON.parse(localStorage.getItem("orders") || "[]");
-      localStorage.setItem(
-        "orders",
-        JSON.stringify([...existingOrders, order])
-      );
+      localStorage.setItem("orders", JSON.stringify([...existingOrders, order]));
 
-      // Clear cart
       delCart();
-
-      // Navigate to confirmation page
       navigate("/order-confirmation", { state: { order } });
     } catch (error) {
       console.error("Error submitting order:", error);
+    } finally {
+      setSubmitting(false);
     }
   };
-    
-
+    console.log( import.meta.env.VITE_CLOUDINARY_CLOUD_NAME)
 
   return (
     <div className="pt-20 pb-16">
@@ -389,71 +370,85 @@ const Checkout: React.FC = () => {
                   </label>
 
                   <div className="flex flex-col items-center justify-center px-6 pt-5 pb-6 mt-1 border-2 border-gray-300 border-dashed rounded-md">
-                    {filePreview ? (
-                      <div className="w-full text-center">
-                        <img
-                          src={filePreview}
-                          alt="Payment proof"
-                          className="mx-auto mb-2 max-h-48"
-                        />
-                        <p className="text-sm text-gray-600">
-                          {formData.paymentProof ? "Uploaded file" : ""}
-                        </p>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setFormData((prev) => ({
-                              ...prev,
-                              paymentProof: null,
-                            }));
-                            setFilePreview("");
-                          }}
-                          className="mt-2 text-sm text-red-600 hover:text-red-800"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="text-center">
-                        <Upload className="w-12 h-12 mx-auto text-gray-400" />
-                        <div className="flex mt-2 text-sm text-gray-600">
-                          <label
-                            htmlFor="file-upload"
-                            className="relative font-medium text-black rounded-md cursor-pointer hover:text-gray-700"
+                  {uploading ? (
+                    <div className="flex items-center justify-center space-x-2">
+                      <div className="w-5 h-5 border-2 border-black rounded-full border-t-transparent animate-spin"></div>
+                      <p className="text-sm">Uploading...</p>
+                    </div>
+                       ) : filePreview ? (
+                        <div className="w-full text-center">
+                          <img
+                            src={filePreview}
+                            alt="Payment proof"
+                            className="mx-auto mb-2 max-h-48"
+                          />
+                          <p className="text-sm text-gray-600">
+                            {formData.paymentProof ? "Uploaded file" : ""}
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setFormData((prev) => ({
+                                ...prev,
+                                paymentProof: null,
+                              }));
+                              setFilePreview("");
+                            }}
+                            className="mt-2 text-sm text-red-600 hover:text-red-800"
                           >
-                            <span>Upload a file</span>
-                            <input
-                              id="file-upload"
-                              name="file-upload"
-                              type="file"
-                              accept="image/*,application/pdf"
-                              className="sr-only"
-                              onChange={handleFileChange}
-                            />
-                          </label>
-                          <p className="pl-1">or drag and drop</p>
+                            Remove
+                          </button>
                         </div>
-                        <p className="text-xs text-gray-500">
-                          PNG, JPG, GIF up to 10MB, or PDF
-                        </p>
-                      </div>
+                      ) : (
+                        <div className="text-center">
+                          <Upload className="w-12 h-12 mx-auto text-gray-400" />
+                          <div className="flex mt-2 text-sm text-gray-600">
+                            <label
+                              htmlFor="file-upload"
+                              className="relative font-medium text-black rounded-md cursor-pointer hover:text-gray-700"
+                            >
+                              <span>Upload a file</span>
+                              <input
+                                id="file-upload"
+                                name="file-upload"
+                                type="file"
+                                accept="image/*,application/pdf"
+                                className="sr-only"
+                                onChange={handleFileChange}
+                              />
+                            </label>
+                            <p className="pl-1">or drag and drop</p>
+                          </div>
+                          <p className="text-xs text-gray-500">
+                            PNG, JPG, GIF up to 10MB, or PDF
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    {errors.paymentProof && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {errors.paymentProof}
+                      </p>
                     )}
                   </div>
-
-                  {errors.paymentProof && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {errors.paymentProof}
-                    </p>
-                  )}
                 </div>
-              </div>
 
-              <Button type="submit" fullWidth disabled={!formData.paymentProof}>
-                Submit Order
+                <Button
+                type="submit"
+                fullWidth
+                disabled={!formData.paymentProof || uploading || submitting}
+              >
+                {submitting ? (
+                  <div className="flex items-center justify-center space-x-2">
+                    <div className="w-4 h-4 border-2 border-white rounded-full border-t-transparent animate-spin"></div>
+                    <span>Submitting...</span>
+                  </div>
+                ) : (
+                  "Submit Order"
+                )}
               </Button>
             </form>
           </div>
-
           {/* Order Summary */}
           <div className="lg:col-span-1">
             <div className="sticky p-6 rounded-lg bg-gray-50 top-24">
