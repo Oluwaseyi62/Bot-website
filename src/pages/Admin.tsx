@@ -80,7 +80,7 @@ const Admin: React.FC = () => {
   const handleDeleteOrder = async () => {
     if (!selectedOrder) return;
 
-    const response = await fetch(`https://bot-server-i8jn.onrender.com/orders/${selectedOrder._id}`, {
+    const response = await fetch(`https://bot-server-i8jn.onrender.com/del-orders/${selectedOrder._id}`, {
       method: 'DELETE',
     });
     if (!response.ok) {
