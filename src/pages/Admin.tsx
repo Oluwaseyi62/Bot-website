@@ -90,7 +90,7 @@ const Admin: React.FC = () => {
       console.error("Failed to fetch order details:", error);
     }
   };
-
+  console.log('seleledd', selectedOrder)
   const handleLogout = () => {
     logout();
     navigate('/admin/login');
@@ -211,7 +211,7 @@ const Admin: React.FC = () => {
                         <p className="font-medium">{order.fullName}</p>
                         <p className="text-sm text-gray-600">{order.email}</p>
                         <p className="text-sm text-gray-600">
-                          Order {order._id} - {new Date(order.orderDate).toLocaleDateString()}
+                          Order {order.orderId} 
                         </p>
                       </div>
                       <div className="flex items-center">
@@ -282,7 +282,7 @@ const Admin: React.FC = () => {
                   <div>
                     <h3 className="text-sm font-medium text-gray-500">Order Items</h3>
                     <div className="mt-2 space-y-2">
-                      {selectedOrder.cartItems?.map(item => (
+                      {selectedOrder.cartItems.map(item => (
                         <div key={item.productId._id} className="flex justify-between">
                           <span>{item.productId.name} x {item.quantity}</span>
                           <span>${(item.productId.price * item.quantity).toFixed(2)}</span>
