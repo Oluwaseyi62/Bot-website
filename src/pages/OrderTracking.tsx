@@ -141,7 +141,7 @@ const OrderTracking: React.FC = () => {
                     </div>
                     <div>
                       <p className="text-gray-600">Total Amount</p>
-                      <p className="font-medium">${order.totalPrice}</p>
+                      <p className="font-medium">₦{order.totalPrice}</p>
                     </div>
                   </div>
                 </div>
@@ -160,7 +160,7 @@ const OrderTracking: React.FC = () => {
                           <p className="font-medium">{item.productId.name}</p>
                           <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
                         </div>
-                        <p className="font-medium">${(item.productId.price * item.quantity).toFixed(2)}</p>
+                        <p className="text-gray-800">₦{(item.productId.price * item.quantity).toLocaleString()}</p>
                       </div>
                     ))}
                   </div>

@@ -80,7 +80,7 @@ const Admin: React.FC = () => {
   const handleDeleteOrder = async () => {
     if (!selectedOrder) return;
 
-    const response = await fetch(`https://bot-server-i8jn.onrender.com/orders/${selectedOrder._id}`, {
+    const response = await fetch(`https://bot-server-i8jn.onrender.com/del-orders/${selectedOrder._id}`, {
       method: 'DELETE',
     });
     if (!response.ok) {
@@ -251,9 +251,10 @@ const Admin: React.FC = () => {
                         }`}>
                           {order.status || 'Pending'}
                         </span>
-                        <div className="flex gap-2 ml-4">
+                        <div className="flex flex-wrap gap-2 ml-4 sm:flex-nowrap">
   <Button 
     variant="secondary"
+    className="w-full sm:w-auto"
     onClick={(e) => {
       e.stopPropagation();
       setSelectedOrder(order);
@@ -264,7 +265,7 @@ const Admin: React.FC = () => {
   </Button>
   <Button 
     variant="outline"
-    className="text-red-600 hover:text-red-700"
+    className="w-full text-red-600 hover:text-red-700 sm:w-auto"
     onClick={(e) => {
       e.stopPropagation();
       setSelectedOrder(order);
@@ -316,24 +317,30 @@ const Admin: React.FC = () => {
                     />
                   </div>
                   <div>
-                    <h3 className="text-sm font-medium text-gray-500">Order Items</h3>
-                    <div className="mt-2 space-y-2">
-                      {selectedOrder.cartItems?.map(item => (
-                        <div key={item.productId._id} className="flex justify-between">
-                          <span>{item.productId.name} x {item.quantity}</span>
-                          <span>${(item.productId.price * item.quantity).toFixed(2)}</span>
-                        </div>
-                      )) || (
-                        <p className="text-gray-500">No items found in this order</p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="pt-4 border-t">
-                    <div className="flex justify-between font-medium">
-                      <span>Total Amount</span>
-                      <span>${selectedOrder.totalPrice ? selectedOrder.totalPrice.toFixed(2) : '0.00'}</span>
-                    </div>
-                  </div>
+  <h3 className="text-sm font-medium text-gray-500">Order Items</h3>
+  <div className="mt-2 space-y-2">
+    {selectedOrder?.cartItems && selectedOrder.cartItems.length > 0 ? (
+      selectedOrder.cartItems.map(item => (
+        <div key={item.productId._id} className="flex justify-between">
+          <span>{item.productId.name} x {item.quantity}</span>
+          <span>₦{(item.productId.price * item.quantity).toLocaleString()}</span>
+        </div>
+      ))
+    ) : (
+      <p className="text-gray-500">No items found in this order</p>
+    )}
+  </div>
+</div>
+
+<div className="pt-4 border-t">
+  <div className="flex justify-between font-medium">
+    <span>Total Amount</span>
+    <span>
+      ₦{selectedOrder?.cartItems?.reduce((acc, item) => acc + item.productId.price * item.quantity, 0).toLocaleString() ?? "0"}
+    </span>
+  </div>
+</div>
+
                   <div className="flex gap-4 mt-6">
                     <Button
                       onClick={() => handleApproveOrder(selectedOrder._id)}

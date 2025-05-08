@@ -116,7 +116,7 @@ const Home: React.FC = () => {
                 <Package size={48} className="text-black" />
               </div>
               <h3 className="mb-2 text-xl font-semibold">Flexible Delivery</h3>
-              <p className="text-gray-600">Choose doorstep delivery ($5.00) or free in-store pickup.</p>
+              <p className="text-gray-600">Choose doorstep delivery (₦2,000) or free in-store pickup.</p>
             </div>
             
             <div className="p-6 text-center bg-white rounded-lg shadow-sm">

@@ -71,7 +71,7 @@ const ProductDetails: React.FC = () => {
           {/* Product Info */}
           <div className="flex flex-col">
             <h1 className="mb-2 text-3xl font-bold">{product.name}</h1>
-            <span className="mb-6 text-2xl font-medium">${product.price.toFixed(2)}</span>
+            <span className="mb-6 text-2xl font-medium">₦{product.price. toLocaleString()}</span>
             
             <div className="mb-6">
               <span className="inline-block mb-2 text-sm text-gray-600">Category: {product.category.charAt(0).toUpperCase() + product.category.slice(1)}</span>
@@ -120,7 +120,7 @@ const ProductDetails: React.FC = () => {
                     <h3 className="mb-1 text-base font-medium transition-colors group-hover:text-gray-700">
                       {relatedProduct.name}
                     </h3>
-                    <p className="font-semibold text-gray-800">${relatedProduct.price.toFixed(2)}</p>
+                    <p className="font-semibold text-gray-800">₦{relatedProduct.price.toLocaleString()}</p>
                   </div>
                 </Link>
               ))}

@@ -34,10 +34,10 @@ const About: React.FC = () => {
               <h2 className="mb-4 text-3xl font-bold">Meet Our Founder</h2>
               <h3 className="mb-2 text-xl font-semibold">Oluwaferanmi Famawode</h3>
               <p className="mb-4 text-gray-700">
-                A visionary fashion designer with over 15 years of experience in the industry, Oluwaferanmi Famawode founded BANG ON TREND in 2018 with a mission to redefine contemporary fashion. Her journey began in her small apartment studio, where she crafted unique pieces that would later become the foundation of our brand.
+                A visionary fashion designer with over 15 years of experience in the industry, Oluwaferanmi Famawode founded BANG ON TREND in 2018 with a mission to redefine contemporary fashion. His journey began in his small apartment studio, where he crafted unique pieces that would later become the foundation of our brand.
               </p>
               <p className="text-gray-700">
-                Oluwaferanmi's design philosophy combines bold aesthetics with practical wearability, creating pieces that empower individuals to express their unique style. Her work has been featured in leading fashion publications and worn by style influencers worldwide.
+                Oluwaferanmi's design philosophy combines bold aesthetics with practical wearability, creating pieces that empower individuals to express their unique style. His work has been featured in leading fashion publications and worn by style influencers worldwide.
               </p>
             </div>
           </div>

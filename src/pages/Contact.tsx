@@ -37,7 +37,7 @@ const Contact: React.FC = () => {
                 <Phone className="mr-4 text-black" />
                 <div>
                   <h3 className="mb-1 text-lg font-medium">Call Us</h3>
-                  <p className="text-gray-700">+1 (123) 456-7890</p>
+                  <p className="text-gray-700">+234 906 629 3147</p>
                   <p className="text-gray-700">Mon-Fri: 9am - 6pm</p>
                 </div>
               </div>
@@ -57,7 +57,7 @@ const Contact: React.FC = () => {
               <div className="mt-8">
                 <h3 className="mb-3 text-lg font-medium">Follow Us</h3>
                 <div className="flex space-x-4">
-                  <a href="https://instagram.com" className="text-black transition-colors hover:text-gray-700" aria-label="Instagram">
+                  <a href="https://www.instagram.com/botrend__" className="text-black transition-colors hover:text-gray-700" aria-label="Instagram">
                     <Instagram size={24} />
                   </a>
                   <a href="https://facebook.com" className="text-black transition-colors hover:text-gray-700" aria-label="Facebook">

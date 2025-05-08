@@ -21,9 +21,9 @@ const OrderConfirmation: React.FC = () => {
   }
 
   const totalAmount = order.deliveryOption === 'delivery'
-    ? order.totalAmount + 5
+    ? order.totalAmount + 2000
     : order.totalAmount;
-
+    
   return (
     <div className="pt-20 pb-16">
       <div className="container px-4 mx-auto">
@@ -112,7 +112,7 @@ const OrderConfirmation: React.FC = () => {
                     <div className="flex-1">
                       <div className="flex justify-between">
                         <h3 className="font-medium">{item.productId.name}</h3>
-                        <p className="text-gray-800">${(item.productId.price * item.quantity).toFixed(2)}</p>
+                        <p className="text-gray-800">₦{(item.productId.price * item.quantity).toLocaleString()}</p>
                       </div>
                       <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                     </div>
@@ -123,15 +123,15 @@ const OrderConfirmation: React.FC = () => {
               <div className="pt-4 border-t border-gray-200">
                 <div className="flex justify-between mb-2">
                   <span className="text-gray-600">Subtotal</span>
-                  <span>${order.totalAmount.toFixed(2)}</span>
+                  <span>₦{order.totalAmount.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between mb-2">
                   <span className="text-gray-600">Shipping</span>
-                  <span>{order.deliveryOption === 'delivery' ? '$5.00' : 'Free'}</span>
+                  <span>{order.deliveryOption === 'delivery' ? '₦2,000' : 'Free'}</span>
                 </div>
                 <div className="flex justify-between pt-2 mt-2 text-lg font-semibold border-t border-gray-200">
                   <span>Total</span>
-                  <span>${totalAmount.toFixed(2)}</span>
+                  <span>₦{totalAmount.toLocaleString()}</span>
                 </div>
               </div>
             </div>

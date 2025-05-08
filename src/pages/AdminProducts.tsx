@@ -273,7 +273,7 @@ const AdminProducts: React.FC = () => {
                   </div>
                   <p className="text-sm text-gray-600">{product.description}</p>
                   <p className="mt-2 text-sm font-medium text-gray-700">
-                    Price: <span className="text-black">${product.price}</span>
+                    Price: <span className="text-black">₦{product.price.toLocaleString()}</span>
                   </p>
                   <p className="text-sm text-gray-500">Category: {product.category}</p>
                   <button

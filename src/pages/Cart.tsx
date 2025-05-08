@@ -18,10 +18,10 @@ const Cart: React.FC = () => {
 
   if (items.length === 0) {
     return (
-      <div className="py-24 px-4 flex flex-col items-center justify-center">
-        <ShoppingBag size={64} className="text-gray-300 mb-4" />
-        <h1 className="text-2xl font-bold mb-2">Your cart is empty</h1>
-        <p className="text-gray-600 mb-6">Looks like you haven't added anything to your cart yet.</p>
+      <div className="flex flex-col items-center justify-center px-4 py-24">
+        <ShoppingBag size={64} className="mb-4 text-gray-300" />
+        <h1 className="mb-2 text-2xl font-bold">Your cart is empty</h1>
+        <p className="mb-6 text-gray-600">Looks like you haven't added anything to your cart yet.</p>
         <Link to="/shop">
           <Button>Continue Shopping</Button>
         </Link>
@@ -31,13 +31,13 @@ const Cart: React.FC = () => {
 
   return (
     <div className="pt-20 pb-16">
-      <div className="container mx-auto px-4">
-        <h1 className="text-3xl font-bold pt-8 mb-8">Shopping Cart</h1>
+      <div className="container px-4 mx-auto">
+        <h1 className="pt-8 mb-8 text-3xl font-bold">Shopping Cart</h1>
         
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
           {/* Cart Items */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg overflow-hidden">
+            <div className="overflow-hidden bg-white rounded-lg">
               {/* Table Header - visible only on desktop */}
               <div className="hidden md:grid md:grid-cols-[100px_1fr_120px_120px_40px] gap-4 p-4 border-b border-gray-200 bg-gray-50">
                 <div></div>
@@ -51,17 +51,17 @@ const Cart: React.FC = () => {
               {items.map(item => (
                 <div key={item.productId._id} className="border-b border-gray-200 last:border-b-0">
                   {/* Mobile View */}
-                  <div className="md:hidden p-4 flex flex-col">
+                  <div className="flex flex-col p-4 md:hidden">
                     <div className="flex gap-4 mb-4">
                       <img 
                         src={item.productId.image} 
                         alt={item.productId.name} 
-                        className="w-20 h-20 object-cover rounded"
+                        className="object-cover w-20 h-20 rounded"
                       />
                       <div className="flex-1">
                         <h3 className="font-medium">{item.productId.name}</h3>
-                        <p className="text-gray-600 text-sm my-1">
-                          ${item.productId.price.toFixed(2)}
+                        <p className="my-1 text-sm text-gray-600">
+                          ₦{item.productId.price.toLocaleString()}
                         </p>
                         <button 
                           onClick={() => {
@@ -69,14 +69,14 @@ const Cart: React.FC = () => {
                               removeFromCart(item.productId._id, item._id);
                             }
                           }}
-                          className="text-red-500 text-sm flex items-center"
+                          className="flex items-center text-sm text-red-500"
                         >
                           <Trash2 size={14} className="mr-1" />
                           Remove
                         </button>
                       </div>
                     </div>
-                    <div className="flex justify-between items-center">
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center border border-gray-300 rounded">
                         <button 
                           onClick={() => {
@@ -91,14 +91,14 @@ const Cart: React.FC = () => {
                         <span className="px-4 py-1">{item.quantity}</span>
                         <button 
                           // onClick={() => updateQuantity(item.productId._id,  item.quantity + 1) }}
-                          onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.productId._id, item.quantity + 1)}
                           className="px-2 py-1 border-l border-gray-300"
                         >
                           <Plus size={16} />
                         </button>
                         
                       </div>
-                      <p className="font-medium">${(item.productId.price * item.quantity).toFixed(2)}</p>
+                      <p className="font-medium">₦{(item.productId.price * item.quantity).toLocaleString()}</p>
                     </div>
                   </div>
                   
@@ -107,11 +107,11 @@ const Cart: React.FC = () => {
                     <img 
                       src={item.productId.image} 
                       alt={item.productId.name} 
-                      className="w-20 h-20 object-cover rounded"
+                      className="object-cover w-20 h-20 rounded"
                     />
                     <div>
                       <h3 className="font-medium">{item.productId.name}</h3>
-                      <p className="text-gray-600 text-sm">${item.productId.price.toFixed(2)} each</p>
+                      <p className="text-sm text-gray-600">₦{item.productId.price.toLocaleString()} each</p>
                     </div>
                     <div className="flex items-center border border-gray-300 rounded">
                       <button 
@@ -137,14 +137,14 @@ const Cart: React.FC = () => {
                         <Plus size={16} />
                       </button>
                     </div>
-                    <p className="font-medium text-right">${(item.productId.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-medium text-right">₦{(item.productId.price * item.quantity).toLocaleString()}</p>
                     <button 
                       onClick={() => {
                         if (item.productId._id && item._id) {
                           removeFromCart(item.productId._id, item._id);
                         }
                       }}
-                      className="text-gray-500 hover:text-red-500 transition-colors"
+                      className="text-gray-500 transition-colors hover:text-red-500"
                       aria-label="Remove item"
                     >
                       <Trash2 size={18} />
@@ -157,13 +157,13 @@ const Cart: React.FC = () => {
           
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-gray-50 rounded-lg p-6">
-              <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+            <div className="p-6 rounded-lg bg-gray-50">
+              <h2 className="mb-4 text-xl font-bold">Order Summary</h2>
               
-              <div className="space-y-3 mb-6">
+              <div className="mb-6 space-y-3">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Subtotal</span>
-                  <span>${totalAmount.toFixed(2)}</span>
+                  <span>₦{totalAmount.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">Shipping</span>
@@ -171,10 +171,10 @@ const Cart: React.FC = () => {
                 </div>
               </div>
               
-              <div className="border-t border-gray-200 pt-4 mb-6">
-                <div className="flex justify-between font-semibold text-lg">
+              <div className="pt-4 mb-6 border-t border-gray-200">
+                <div className="flex justify-between text-lg font-semibold">
                   <span>Total</span>
-                  <span>${totalAmount.toFixed(2)}</span>
+                  <span>₦{totalAmount.toLocaleString()}</span>
                 </div>
               </div>
               
@@ -182,7 +182,7 @@ const Cart: React.FC = () => {
                 <Button fullWidth>Proceed to Checkout</Button>
               </Link>
               
-              <Link to="/shop" className="block text-center mt-4 text-gray-600 hover:underline">
+              <Link to="/shop" className="block mt-4 text-center text-gray-600 hover:underline">
                 Continue Shopping
               </Link>
             </div>

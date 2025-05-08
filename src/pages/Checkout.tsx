@@ -467,9 +467,7 @@ const Checkout: React.FC = () => {
                       <p className="text-sm text-gray-600">
                         Qty: {item.quantity}
                       </p>
-                      <p className="text-gray-800">
-                        ${(item.productId.price * item.quantity).toFixed(2)}
-                      </p>
+                      <p className="text-gray-800">₦{(item.productId.price * item.quantity).toLocaleString()}</p>
                     </div>
                   </div>
                 ))}
@@ -478,21 +476,19 @@ const Checkout: React.FC = () => {
               <div className="pt-4 mb-6 border-t border-gray-200">
                 <div className="flex justify-between mb-2">
                   <span className="text-gray-600">Subtotal</span>
-                  <span>${totalAmount.toFixed(2)}</span>
+                  <span>₦{totalAmount.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between mb-2">
                   <span className="text-gray-600">Shipping</span>
-                  <span>
-                    {formData.deliveryOption === "delivery" ? "$5.00" : "Free"}
-                  </span>
+                  <span>{formData.deliveryOption === 'delivery' ? '₦2,000' : 'Free'}</span>
                 </div>
                 <div className="flex justify-between pt-2 mt-2 text-lg font-semibold border-t border-gray-200">
                   <span>Total</span>
                   <span>
-                    $
-                    {formData.deliveryOption === "delivery"
-                      ? (totalAmount + 5).toFixed(2)
-                      : totalAmount.toFixed(2)}
+                    ₦{formData.deliveryOption === 'delivery' 
+                      ? (totalAmount + 2000).toLocaleString() 
+                      : totalAmount.toLocaleString()
+                    }
                   </span>
                 </div>
               </div>

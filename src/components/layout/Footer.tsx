@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
               Fashion that speaks volumes. Elevate your style with our curated collections.
             </p>
             <div className="flex space-x-4">
-              <a href="https://instagram.com" className="text-white transition-colors hover:text-gray-300" aria-label="Instagram">
+              <a href="https://www.instagram.com/botrend__/" className="text-white transition-colors hover:text-gray-300" aria-label="Instagram">
                 <Instagram />
               </a>
               <a href="https://facebook.com" className="text-white transition-colors hover:text-gray-300" aria-label="Facebook">
@@ -45,10 +45,10 @@ const Footer: React.FC = () => {
           
           <div>
             <h3 className="mb-4 text-xl font-semibold">Delivery Information</h3>
-            <p className="mb-2 text-gray-300">Doorstep Delivery: $5.00</p>
+            <p className="mb-2 text-gray-300">Doorstep Delivery: ₦2,000</p>
             <p className="mb-4 text-gray-300">Store Pickup: Free</p>
             <p className="text-gray-300">Contact: info@bangontrend.com</p>
-            <p className="text-gray-300">Phone: +1 (123) 456-7890</p>
+            <p className="text-gray-300">Phone: +234 906 629 3147</p>
           </div>
         </div>
         
