@@ -103,7 +103,7 @@ const Admin: React.FC = () => {
       console.error("Failed to fetch order details:", error);
     }
   };
-
+  console.log('seleledd', selectedOrder)
   const handleLogout = () => {
     logout();
     navigate('/admin/login');
@@ -238,7 +238,7 @@ const Admin: React.FC = () => {
                         <p className="font-medium">{order.fullName}</p>
                         <p className="text-sm text-gray-600">{order.email}</p>
                         <p className="text-sm text-gray-600">
-                          Order {order._id} - {new Date(order.orderDate).toLocaleDateString()}
+                          Order {order.orderId} 
                         </p>
                       </div>
                       <div className="flex items-center">
@@ -317,30 +317,24 @@ const Admin: React.FC = () => {
                     />
                   </div>
                   <div>
-  <h3 className="text-sm font-medium text-gray-500">Order Items</h3>
-  <div className="mt-2 space-y-2">
-    {selectedOrder?.cartItems && selectedOrder.cartItems.length > 0 ? (
-      selectedOrder.cartItems.map(item => (
-        <div key={item.productId._id} className="flex justify-between">
-          <span>{item.productId.name} x {item.quantity}</span>
-          <span>₦{(item.productId.price * item.quantity).toLocaleString()}</span>
-        </div>
-      ))
-    ) : (
-      <p className="text-gray-500">No items found in this order</p>
-    )}
-  </div>
-</div>
-
-<div className="pt-4 border-t">
-  <div className="flex justify-between font-medium">
-    <span>Total Amount</span>
-    <span>
-      ₦{selectedOrder?.cartItems?.reduce((acc, item) => acc + item.productId.price * item.quantity, 0).toLocaleString() ?? "0"}
-    </span>
-  </div>
-</div>
-
+                    <h3 className="text-sm font-medium text-gray-500">Order Items</h3>
+                    <div className="mt-2 space-y-2">
+                      {selectedOrder.cartItems?.map(item => (
+                        <div key={item.productId._id} className="flex justify-between">
+                          <span>{item.productId.name} x {item.quantity}</span>
+                          <span>${(item.productId.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                      )) || (
+                        <p className="text-gray-500">No items found in this order</p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="pt-4 border-t">
+                    <div className="flex justify-between font-medium">
+                      <span>Total Amount</span>
+                      <span>${selectedOrder.totalPrice ? selectedOrder.totalPrice.toFixed(2) : '0.00'}</span>
+                    </div>
+                  </div>
                   <div className="flex gap-4 mt-6">
                     <Button
                       onClick={() => handleApproveOrder(selectedOrder._id)}
