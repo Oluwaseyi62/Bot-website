@@ -19,7 +19,7 @@ const Home: React.FC = () => {
   const featuredProducts = products.filter(product => product.featured);
   
   
-  const heroText = "BANG ON TREND";
+  const heroText = "ZYNTH";
 
  
   const  sessionId = getSessionId();

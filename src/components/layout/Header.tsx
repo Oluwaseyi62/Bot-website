@@ -35,7 +35,7 @@ const Header: React.FC = () => {
       <div className="container px-4 mx-auto">
         <div className="flex items-center justify-between">
           <Link to="/" className="text-2xl font-bold">
-            <span className="tracking-wide text-black">BANG ON TREND</span>
+            <span className="tracking-wide text-black">ZYNTH</span>
           </Link>
 
           {/* Desktop Navigation */}

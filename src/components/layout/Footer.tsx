@@ -8,7 +8,7 @@ const Footer: React.FC = () => {
       <div className="container px-4 mx-auto">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div>
-            <h3 className="mb-4 text-xl font-semibold">BANG ON TREND</h3>
+            <h3 className="mb-4 text-xl font-semibold">ZYNTH</h3>
             <p className="mb-4 text-gray-300">
               Fashion that speaks volumes. Elevate your style with our curated collections.
             </p>
@@ -47,13 +47,13 @@ const Footer: React.FC = () => {
             <h3 className="mb-4 text-xl font-semibold">Delivery Information</h3>
             <p className="mb-2 text-gray-300">Doorstep Delivery: ₦2,000</p>
             <p className="mb-4 text-gray-300">Store Pickup: Free</p>
-            <p className="text-gray-300">Contact: info@bangontrend.com</p>
+            <p className="text-gray-300">Contact: info@ZYNTH.com</p>
             <p className="text-gray-300">Phone: +234 906 629 3147</p>
           </div>
         </div>
         
         <div className="pt-8 mt-8 text-center text-gray-400 border-t border-gray-800">
-          <p>© {new Date().getFullYear()} BANG ON TREND. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} ZYNTH. All rights reserved.</p>
           <Link 
             to="/admin/login" 
             className="inline-block mt-2 text-sm text-gray-600 transition-colors hover:text-gray-400"
