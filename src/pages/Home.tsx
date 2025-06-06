@@ -46,7 +46,7 @@ const Home: React.FC = () => {
       {/* Hero Section */}
       <section 
         className="relative flex items-center justify-center h-screen bg-center bg-cover"
-        style={{ backgroundImage: `url('/images/bot5.png')` }}
+        style={{ backgroundImage: `url('/images/Artboard 6.jpg')` }}
       >
         <div className="absolute inset-0 bg-black/30"></div>
         <div className="relative z-10 px-4 text-center text-white">
@@ -65,7 +65,7 @@ const Home: React.FC = () => {
               <Button className="text-base">SHOP NOW</Button>
             </Link>
             <Link to="/about">
-              <Button variant="outline" className="text-base">LEARN MORE ABOUT US</Button>
+              <Button className="text-base">LEARN MORE ABOUT US</Button>
             </Link>
           </div>
         </div>

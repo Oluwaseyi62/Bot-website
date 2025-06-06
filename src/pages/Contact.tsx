@@ -28,8 +28,8 @@ const Contact: React.FC = () => {
                 <Mail className="mr-4 text-black" />
                 <div>
                   <h3 className="mb-1 text-lg font-medium">Email Us</h3>
-                  <p className="text-gray-700">info@bangontrend.com</p>
-                  <p className="text-gray-700">support@bangontrend.com</p>
+                  <p className="text-gray-700">info@zynth.com</p>
+                  <p className="text-gray-700">support@zynth.com</p>
                 </div>
               </div>
               

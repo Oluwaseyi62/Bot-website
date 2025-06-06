@@ -8,7 +8,7 @@ const About: React.FC = () => {
       {/* Hero Section */}
       <section 
         className="relative flex items-center justify-center bg-center bg-cover h-80"
-        style={{ backgroundImage: 'url(https://images.pexels.com/photos/4820740/pexels-photo-4820740.jpeg)' }}
+        style={{ backgroundImage: `url('/images/Artboard 11.jpg')` }}
       >
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="relative z-10 px-4 text-center text-white">
@@ -34,7 +34,7 @@ const About: React.FC = () => {
               <h2 className="mb-4 text-3xl font-bold">Meet Our Founder</h2>
               <h3 className="mb-2 text-xl font-semibold">Oluwaferanmi Famawode</h3>
               <p className="mb-4 text-gray-700">
-                A visionary fashion designer with over 15 years of experience in the industry, Oluwaferanmi Famawode founded BANG ON TREND in 2018 with a mission to redefine contemporary fashion. His journey began in his small apartment studio, where he crafted unique pieces that would later become the foundation of our brand.
+                A visionary fashion designer with over 15 years of experience in the industry, Oluwaferanmi Famawode founded ZYNTH in 2018 with a mission to redefine contemporary fashion. His journey began in his small apartment studio, where he crafted unique pieces that would later become the foundation of our brand.
               </p>
               <p className="text-gray-700">
                 Oluwaferanmi's design philosophy combines bold aesthetics with practical wearability, creating pieces that empower individuals to express their unique style. His work has been featured in leading fashion publications and worn by style influencers worldwide.
@@ -56,14 +56,14 @@ const About: React.FC = () => {
                 What started as Oluwaferanmi's passion project in 2018 quickly evolved into a movement. The first collection, featuring just 12 statement pieces, sold out within weeks of launch. This overwhelming response confirmed our belief that fashion enthusiasts were hungry for designs that didn't just follow trends but defined them.
               </p>
               <p className="text-gray-700">
-                Today, BANG ON TREND has grown into a respected name in contemporary fashion, with our pieces being shipped to style-conscious customers worldwide.
+                Today, ZYNTH has grown into a respected name in contemporary fashion, with our pieces being shipped to style-conscious customers worldwide.
               </p>
             </div>
             
             <div className="md:w-1/2">
               <h3 className="mb-4 text-xl font-semibold">Our Philosophy</h3>
               <p className="mb-4 text-gray-700">
-                At BANG ON TREND, we believe that fashion is more than just clothing—it's a powerful form of self-expression. Our designs blend timeless elements with forward-thinking details, creating pieces that feel both familiar and fresh.
+                At ZYNTH, we believe that fashion is more than just clothing—it's a powerful form of self-expression. Our designs blend timeless elements with forward-thinking details, creating pieces that feel both familiar and fresh.
               </p>
               <p className="text-gray-700">
                 We're committed to responsible production practices and work closely with ethical manufacturers to ensure our fashion doesn't come at the expense of people or the planet.
